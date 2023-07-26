@@ -29,8 +29,8 @@ public class EmployeeService  implements IEmployeeService {
     @Override
     public Employee AddEmployee(EmployeeDTO employeeDTO) {
         Department department=_departmentDal.findById(employeeDTO.getDepartmentID()).get();
-        DeptManager deptManager=_deptManagerDal.findAll().stream().filter(d->d.getDepartment().getDepartmentID()==department.getDepartmentID()).findFirst().get();
-        Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(), deptManager);
+        DeptManager deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID()).get();
+        Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),department, deptManager);
         return _employeeDal.save(employee);
 
     }
@@ -50,8 +50,8 @@ public class EmployeeService  implements IEmployeeService {
         if(_employeeDal.existsById(id))
         {
             Department department=_departmentDal.findById(employeeDTO.getDepartmentID()).get();
-            DeptManager deptManager=_deptManagerDal.findAll().stream().filter(d->d.getDepartment().getDepartmentID()==department.getDepartmentID()).findFirst().get();
-            Employee existingEmployee=new Employee(id,employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),deptManager);
+            DeptManager deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID()).get();
+            Employee existingEmployee=new Employee(id,employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),deptManager,department);
             _employeeDal.save(existingEmployee);
             return Boolean.TRUE;
         }

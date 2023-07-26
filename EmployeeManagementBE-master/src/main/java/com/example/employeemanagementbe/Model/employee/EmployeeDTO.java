@@ -10,6 +10,7 @@ public class EmployeeDTO {
 
     private String email;
     private Long departmentID;
+    private Long deptManagerID;
 
     public String getFirstName() {
         return firstName;
@@ -25,5 +26,9 @@ public class EmployeeDTO {
 
     public Long getDepartmentID() {
         return departmentID;
+    }
+
+    public Long getDeptManagerID() {
+        return deptManagerID;
     }
 }

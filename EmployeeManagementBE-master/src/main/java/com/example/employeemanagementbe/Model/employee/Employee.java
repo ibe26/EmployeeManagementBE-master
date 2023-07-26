@@ -19,7 +19,6 @@ public class Employee {
     private String email;
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="department_id")
-    @Transient()
     private Department department;
 
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -70,18 +69,26 @@ public class Employee {
     }
 
     public Department getDepartment() {
-        Department department1=getDeptManager().getDepartment();
-        return department1;
+        return department;
     }
 
     public Employee() {
     }
 
-    public Employee(Long empID, String firstName, String lastName, String email, DeptManager deptManager) {
+    public Employee(Long empID, String firstName, String lastName, String email, DeptManager deptManager,Department department) {
         this.empID = empID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.deptManager = deptManager;
+        this.department=department;
+    }
+
+    public Employee(String firstName, String lastName, String email, Department department, DeptManager deptManager) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.department = department;
         this.deptManager = deptManager;
     }
 

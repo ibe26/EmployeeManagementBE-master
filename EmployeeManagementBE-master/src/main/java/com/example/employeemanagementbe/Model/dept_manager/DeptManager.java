@@ -15,7 +15,7 @@ public class DeptManager {
     private String lastName;
 
     private String email;
-    @OneToOne(cascade = CascadeType.MERGE,orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "department_id")
     private Department department;
 
