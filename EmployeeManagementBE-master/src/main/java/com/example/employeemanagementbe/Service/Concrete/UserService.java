@@ -7,7 +7,6 @@ import com.example.employeemanagementbe.Model.user.User;
 import com.example.employeemanagementbe.Model.user.UserDto;
 import com.example.employeemanagementbe.Service.Abstract.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +27,12 @@ public class UserService implements IUserService {
     @Override
     public UserDto login(CredentialsDto credentialsDto) {
         User user = _userDal.findByLogin(credentialsDto.login()).get();
-        System.out.println(user);
         if (_passwordEncoder.matches(CharBuffer.wrap((credentialsDto.password())), user.getpassword())) {
-        //if(credentialsDto.password().equals(user.getpassword())) {
         return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getLogin());
         } else throw new IllegalStateException("password is incorrect");
+    }
+    public Optional<User> findByLogin(String login){
+        return _userDal.findAll().stream().filter(u->u.getLogin().equals(login)).findFirst();
     }
 
     @Override
@@ -46,6 +46,8 @@ public class UserService implements IUserService {
         _userDal.save(user);
         return userDto;
     }
+
+
 
     @Override
     public Collection<User> GetUser() {

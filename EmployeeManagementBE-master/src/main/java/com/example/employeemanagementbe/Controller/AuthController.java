@@ -4,19 +4,15 @@ import com.example.employeemanagementbe.Model.user.CredentialsDto;
 import com.example.employeemanagementbe.Model.user.SignUpDto;
 import com.example.employeemanagementbe.Model.user.UserDto;
 import com.example.employeemanagementbe.Service.Abstract.IUserService;
-import com.example.employeemanagementbe.config.UserAuthProvider;
+import com.example.employeemanagementbe.security.UserAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.security.AuthProvider;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
     private final IUserService _userService;
     private final UserAuthProvider _userAuthProvider;

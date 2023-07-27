@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
 public interface IUserService {
     UserDto login(CredentialsDto credentialsDto);
     UserDto register(SignUpDto signUpDto);
@@ -18,4 +17,5 @@ public interface IUserService {
     Boolean DeleteUser(Long UserID);
     Boolean UpdateUser(CredentialsDto credentialsDto, Long id);
     Optional<User> FindUser(Long id);
+    Optional<User> findByLogin(String login);
 }
