@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/employee")
@@ -29,35 +30,38 @@ public class EmployeeController {
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
-        Boolean employeeExists=!_employeeService.FindEmployee(id).isEmpty();
-        if(employeeExists)
+        final Optional<Employee>  employeeExists = _employeeService.FindEmployee(id);
+        if(employeeExists.isPresent())
         {
-            return new ResponseEntity<Employee>(_employeeService.FindEmployee(id).get(),HttpStatus.OK);
+            return new ResponseEntity<>(_employeeService.FindEmployee(id).get(),HttpStatus.OK);
         }
-        return  new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @CacheEvict(value = "employees",allEntries = true)
     @PostMapping("/post")
     public ResponseEntity<Employee> saveEmployee(@RequestBody EmployeeDTO employeeDTO){
-
-        return new ResponseEntity<Employee>(_employeeService.AddEmployee(employeeDTO),HttpStatus.OK);
+        Employee employee=_employeeService.AddEmployee(employeeDTO);
+        if(employee!=null){
+            return new ResponseEntity<>(employee,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @CacheEvict(value = "employees",allEntries = true)
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable("id") Long id){
         if(_employeeService.DeleteEmployee(id))
         {
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @CacheEvict(value = "employees",allEntries = true)
     @PutMapping("/put/{id}")
     public ResponseEntity<HttpStatus> putEmployee(@PathVariable("id") Long id,@RequestBody EmployeeDTO employeeDTO){
         if(_employeeService.UpdateEmployee(employeeDTO,id))
         {
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
