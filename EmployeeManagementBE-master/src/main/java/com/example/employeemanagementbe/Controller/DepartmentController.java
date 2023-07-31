@@ -27,14 +27,14 @@ public class DepartmentController {
     @Cacheable("departments")
     @GetMapping("getAll")
     public ResponseEntity<Collection<Department>> getAllDepartments(){
-        return new ResponseEntity<Collection<Department>>(_departmentService.GetDepartment(), HttpStatus.OK);
+        return new ResponseEntity<>(_departmentService.GetDepartment(), HttpStatus.OK);
     }
     @GetMapping("get/{id}")
     public ResponseEntity<?> getDepartment(@PathVariable("id") Long id){
         Optional<Department> departmentExists = _departmentService.FindDepartment(id);
         if(departmentExists.isPresent())
         {
-            return new ResponseEntity<Department>(_departmentService.FindDepartment(id).get(),HttpStatus.OK);
+            return new ResponseEntity<>(_departmentService.FindDepartment(id).get(),HttpStatus.OK);
         }
         return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
     }
@@ -42,16 +42,16 @@ public class DepartmentController {
     @CacheEvict(value = "departments",allEntries = true)
     public ResponseEntity<Department> postDepartment(@RequestBody DepartmentDTO departmentDTO){
 
-         return new ResponseEntity<Department>(_departmentService.AddDepartment(departmentDTO),HttpStatus.OK);
+         return new ResponseEntity<>(_departmentService.AddDepartment(departmentDTO),HttpStatus.OK);
     }
     @DeleteMapping("delete/{id}")
     @CacheEvict(value = "departments",allEntries = true)
     public ResponseEntity<HttpStatus> deleteDepartment(@PathVariable("id") Long id){
         if(_departmentService.DeleteDepartment(id))
         {
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("put/{id}")
@@ -59,9 +59,9 @@ public class DepartmentController {
     public ResponseEntity<HttpStatus> putDepartment(@PathVariable("id") Long id,@RequestBody DepartmentDTO departmentDTO){
         if(_departmentService.UpdateDepartment(departmentDTO, id))
         {
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return  new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

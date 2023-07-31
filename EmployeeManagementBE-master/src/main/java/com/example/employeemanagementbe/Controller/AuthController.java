@@ -31,23 +31,23 @@ public class AuthController {
         }
         String token=_userAuthProvider.generateJwtToken(userDto);
         userDto.setToken(token);
-        return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
+        return new ResponseEntity<>(userDto,HttpStatus.OK);
     }
     @PostMapping("/register")
     public ResponseEntity<HttpStatus> register(@RequestBody SignUpDto signUpDto){
         UserDto userDto=_userService.register(signUpDto);
         if(userDto==null){
-            return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/validate-token")
     public ResponseEntity<Boolean> validateToken(@RequestBody String token){
        if(_userAuthProvider.validateJwtToken(token)){
-           return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+           return new ResponseEntity<>(true,HttpStatus.OK);
        }
-       return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
+       return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
 
     }
 

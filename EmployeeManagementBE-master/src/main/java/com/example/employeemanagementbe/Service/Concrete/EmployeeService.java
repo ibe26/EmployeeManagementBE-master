@@ -56,13 +56,14 @@ public class EmployeeService  implements IEmployeeService {
 
     @Override
     public Boolean UpdateEmployee(EmployeeDTO employeeDTO, Long id) {
-        if(_employeeDal.existsById(id))
-        {
-            Department department=_departmentDal.findById(employeeDTO.getDepartmentID()).get();
-            DeptManager deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID()).get();
-            Employee existingEmployee=new Employee(id,employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),deptManager,department);
-            _employeeDal.save(existingEmployee);
-            return Boolean.TRUE;
+        if(_employeeDal.existsById(id)) {
+            Optional<Department> department = _departmentDal.findById(employeeDTO.getDepartmentID());
+            Optional<DeptManager> deptManager = _deptManagerDal.findById(employeeDTO.getDeptManagerID());
+            if (deptManager.isPresent() && department.isPresent()) {
+                Employee existingEmployee = new Employee(id, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(), deptManager.get(), department.get());
+                _employeeDal.save(existingEmployee);
+                return Boolean.TRUE;
+            }
         }
         return Boolean.FALSE;
     }
