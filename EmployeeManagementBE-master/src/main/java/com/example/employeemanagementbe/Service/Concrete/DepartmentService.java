@@ -12,28 +12,28 @@ import java.util.Optional;
 @Service
 public class DepartmentService implements IDepartmentService {
 
-    public final IDepartmentDal _departmenDal;
+    public final IDepartmentDal _departmentDal;
 
     public DepartmentService(IDepartmentDal departmenDal) {
-        _departmenDal = departmenDal;
+        _departmentDal = departmenDal;
     }
 
     @Override
     public Collection<Department> GetDepartment() {
-        return _departmenDal.findAll();
+        return _departmentDal.findAll();
     }
 
     @Override
     public Department AddDepartment(DepartmentDTO departmentDTO) {
         Department department=new Department(departmentDTO.getDepartmentName());
-            return _departmenDal.save(department);
+            return _departmentDal.save(department);
     }
 
     @Override
     public Boolean DeleteDepartment(Long departmentID) {
-        if(_departmenDal.existsById(departmentID))
+        if(_departmentDal.existsById(departmentID))
         {
-            _departmenDal.deleteById(departmentID);
+            _departmentDal.deleteById(departmentID);
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -41,10 +41,10 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public Boolean UpdateDepartment(DepartmentDTO departmentDTO, Long id) {
-        if(_departmenDal.findById(id).isPresent())
+        if(_departmentDal.findById(id).isPresent())
         {
             Department department=new Department(id, departmentDTO.getDepartmentName());
-            _departmenDal.save(department);
+            _departmentDal.save(department);
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -52,7 +52,7 @@ public class DepartmentService implements IDepartmentService {
 
     @Override
     public Optional<Department> FindDepartment(Long id) {
-       return _departmenDal.findById(id);
+       return _departmentDal.findById(id);
     }
 
 }

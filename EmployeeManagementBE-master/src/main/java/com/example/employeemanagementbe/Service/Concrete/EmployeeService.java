@@ -28,11 +28,19 @@ public class EmployeeService  implements IEmployeeService {
 
     @Override
     public Employee AddEmployee(EmployeeDTO employeeDTO) {
-        Department department=_departmentDal.findById(employeeDTO.getDepartmentID()).get();
-        DeptManager deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID()).get();
-        Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),department, deptManager);
-        return _employeeDal.save(employee);
+        Optional<Department> department=_departmentDal.findById(employeeDTO.getDepartmentID());
+        Optional<DeptManager> deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID());
 
+        if(deptManager.isPresent() && department.isPresent()){
+            Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),department.get(), deptManager.get());
+
+            //Department and Department Manager's department must be compatible.
+            if(employee.getDepartment().getDepartmentID()!=employee.getDeptManager().getDepartment().getDepartmentID()){
+                throw new IllegalStateException("Department manager is not a manager of given department.");
+            }
+            return _employeeDal.save(employee);
+        }
+            else return null;
     }
 
     @Override
@@ -61,11 +69,14 @@ public class EmployeeService  implements IEmployeeService {
     @Override
     public Collection<Employee> GetEmployees() {
        return _employeeDal.findAll();
-
     }
 
     @Override
     public Optional<Employee> FindEmployee(Long id) {
-        return _employeeDal.findById(id);
+        Optional<Employee> foundEmployee = _employeeDal.findById(id);
+        if(foundEmployee.isPresent()){
+            return foundEmployee;
+        }
+        else return null;
     }
 }

@@ -12,10 +12,5 @@ import java.util.Optional;
 public interface IUserService {
     UserDto login(CredentialsDto credentialsDto);
     UserDto register(SignUpDto signUpDto);
-    Collection<User> GetUser();
-    User AddUser(CredentialsDto credentialsDto);
-    Boolean DeleteUser(Long UserID);
-    Boolean UpdateUser(CredentialsDto credentialsDto, Long id);
-    Optional<User> FindUser(Long id);
     Optional<User> findByLogin(String login);
 }

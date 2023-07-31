@@ -32,7 +32,11 @@ public class DeptManagerService implements IDeptManagerService {
 
     @Override
     public DeptManager AddDeptManager(DeptManagerDTO deptManagerDTO) {
-        DeptManager deptManager=new DeptManager(deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(),_departmentDal.findById(deptManagerDTO.getDepartmentID()).get());
+        Optional<Department> foundDepartment=_departmentDal.findById(deptManagerDTO.getDepartmentID());
+        if(foundDepartment.isEmpty()){
+            throw new IllegalStateException("No department found.");
+        }
+        DeptManager deptManager=new DeptManager(deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(),foundDepartment.get());
         return _deptManagerDal.save(deptManager);
     }
 
@@ -50,21 +54,31 @@ public class DeptManagerService implements IDeptManagerService {
     public Boolean UpdateDeptManager(DeptManagerDTO deptManagerDTO, Long id) {
         if(_deptManagerDal.existsById(id))
         {
-            Department department=_departmentDal.findById(deptManagerDTO.getDepartmentID()).get();
-            DeptManager existingDeptManager=new DeptManager(id, deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(), department);
-            _deptManagerDal.save(existingDeptManager);
-            return Boolean.TRUE;
-        }
+            Optional<Department> department=_departmentDal.findById(deptManagerDTO.getDepartmentID());
+            if(department.isPresent()){
+                DeptManager existingDeptManager=new DeptManager(id, deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(), department.get());
+                _deptManagerDal.save(existingDeptManager);
+                return Boolean.TRUE;
+            }
+           }
         return Boolean.FALSE;
     }
 
     @Override
     public Optional<DeptManager> FindDeptManager(Long id) {
-        return _deptManagerDal.findById(id);
+        Optional<DeptManager> deptManagerOptional= _deptManagerDal.findById(id);
+        if(deptManagerOptional.isPresent()){
+            return deptManagerOptional;
+        }
+        else return null;
     }
 
     @Override
     public Optional<DeptManager> FilterDeptManager(Predicate<DeptManager> predicate) {
-        return _deptManagerDal.findAll().stream().filter(predicate).findFirst();
+        Optional<DeptManager> deptManagerOptional= _deptManagerDal.findAll().stream().filter(predicate).findFirst();
+        if(deptManagerOptional.isPresent()){
+            return deptManagerOptional;
+        }
+        else return null;
     }
 }

@@ -24,8 +24,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody CredentialsDto credentialsDto){
+    public ResponseEntity<?> login(@RequestBody CredentialsDto credentialsDto){
         UserDto userDto=_userService.login(credentialsDto);
+        if(userDto==null){
+            return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        }
         String token=_userAuthProvider.generateJwtToken(userDto);
         userDto.setToken(token);
         return new ResponseEntity<UserDto>(userDto,HttpStatus.OK);
@@ -33,15 +36,18 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<HttpStatus> register(@RequestBody SignUpDto signUpDto){
         UserDto userDto=_userService.register(signUpDto);
+        if(userDto==null){
+            return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+        }
 
         return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
     @PostMapping("/validate-token")
-    public ResponseEntity<HttpStatus> validateToken(@RequestBody String token){
+    public ResponseEntity<Boolean> validateToken(@RequestBody String token){
        if(_userAuthProvider.validateJwtToken(token)){
-           return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+           return new ResponseEntity<Boolean>(true,HttpStatus.OK);
        }
-       return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+       return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
 
     }
 

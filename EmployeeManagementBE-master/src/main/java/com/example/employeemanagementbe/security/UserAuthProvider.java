@@ -28,7 +28,7 @@ public class UserAuthProvider {
     public String generateJwtToken(UserDto userDto) {
 
         final Date now=new Date();
-        final Date validity=new Date(now.getTime()+1000*60*60);
+        final Date validity=new Date(now.getTime()+1000*60*60*24);
         System.out.println(userDto.getLogin());
         return Jwts.builder()
                 .setSubject(userDto.getLogin())
