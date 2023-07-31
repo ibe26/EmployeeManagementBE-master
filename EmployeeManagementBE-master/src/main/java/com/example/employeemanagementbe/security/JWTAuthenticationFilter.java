@@ -2,13 +2,11 @@ package com.example.employeemanagementbe.security;
 
 import com.example.employeemanagementbe.Model.user.User;
 import com.example.employeemanagementbe.Service.Abstract.IUserService;
-import com.example.employeemanagementbe.Service.Concrete.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;

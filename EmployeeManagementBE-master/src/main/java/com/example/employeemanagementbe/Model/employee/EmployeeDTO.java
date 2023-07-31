@@ -1,7 +1,5 @@
 package com.example.employeemanagementbe.Model.employee;
 
-import com.example.employeemanagementbe.Model.department.Department;
-
 public class EmployeeDTO {
 
     private String firstName;
