@@ -26,7 +26,7 @@ public class EmployeeController {
     @Cacheable("employees")
     @GetMapping("/getAll")
     public ResponseEntity<Collection<Employee>> getEmployees(){
-        return new ResponseEntity<Collection<Employee>>(_employeeService.GetEmployees(), HttpStatus.OK);
+        return new ResponseEntity<>(_employeeService.GetEmployees(), HttpStatus.OK);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
@@ -38,8 +38,10 @@ public class EmployeeController {
         return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     @CacheEvict(value = "employees",allEntries = true)
-    @PostMapping("/post")
-    public ResponseEntity<Employee> saveEmployee(@RequestBody EmployeeDTO employeeDTO){
+    @PostMapping(value = "/post")
+
+    public ResponseEntity<Employee> saveEmployee(@RequestBody() EmployeeDTO employeeDTO){
+
         Employee employee=_employeeService.AddEmployee(employeeDTO);
         if(employee!=null){
             return new ResponseEntity<>(employee,HttpStatus.OK);
@@ -64,4 +66,6 @@ public class EmployeeController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
 }
