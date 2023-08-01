@@ -24,7 +24,6 @@ public class UserAuthProvider {
 
         final Date now=new Date();
         final Date validity=new Date(now.getTime()+1000*60*60*24);
-        System.out.println(userDto.getLogin());
         return Jwts.builder()
                 .setSubject(userDto.getLogin())
                 .setIssuedAt(now)
