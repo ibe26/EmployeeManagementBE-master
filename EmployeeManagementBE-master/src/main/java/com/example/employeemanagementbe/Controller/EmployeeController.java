@@ -17,23 +17,23 @@ import java.util.Optional;
 @RequestMapping(path = "api/employee")
 @CrossOrigin(origins = "*")
 public class EmployeeController {
-    private final IEmployeeService _employeeService;
+    private final IEmployeeService employeeService;
 
     @Autowired
     public EmployeeController(IEmployeeService employeeService) {
-        _employeeService = employeeService;
+        this.employeeService = employeeService;
     }
     @Cacheable("employees")
     @GetMapping("/getAll")
     public ResponseEntity<Collection<Employee>> getEmployees(){
-        return new ResponseEntity<>(_employeeService.GetEmployees(), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getEmployees(), HttpStatus.OK);
     }
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
-        final Optional<Employee>  employeeExists = _employeeService.FindEmployee(id);
+        final Optional<Employee>  employeeExists = employeeService.findEmployee(id);
         if(employeeExists.isPresent())
         {
-            return new ResponseEntity<>(_employeeService.FindEmployee(id).get(),HttpStatus.OK);
+            return new ResponseEntity<>(employeeService.findEmployee(id).get(),HttpStatus.OK);
         }
         return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -42,7 +42,7 @@ public class EmployeeController {
 
     public ResponseEntity<Employee> saveEmployee(@RequestBody() EmployeeDTO employeeDTO){
 
-        Employee employee=_employeeService.AddEmployee(employeeDTO);
+        Employee employee=employeeService.addEmployee(employeeDTO);
         if(employee!=null){
             return new ResponseEntity<>(employee,HttpStatus.OK);
         }
@@ -51,7 +51,7 @@ public class EmployeeController {
     @CacheEvict(value = "employees",allEntries = true)
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteEmployee(@PathVariable("id") Long id){
-        if(_employeeService.DeleteEmployee(id))
+        if(employeeService.deleteEmployee(id))
         {
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -60,7 +60,7 @@ public class EmployeeController {
     @CacheEvict(value = "employees",allEntries = true)
     @PutMapping("/put/{id}")
     public ResponseEntity<HttpStatus> putEmployee(@PathVariable("id") Long id,@RequestBody EmployeeDTO employeeDTO){
-        if(_employeeService.UpdateEmployee(employeeDTO,id))
+        if(employeeService.updateEmployee(employeeDTO,id))
         {
             return new ResponseEntity<>(HttpStatus.OK);
         }

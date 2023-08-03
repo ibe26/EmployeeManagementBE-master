@@ -16,21 +16,21 @@ import java.util.Optional;
 
 @Service
 public class EmployeeService  implements IEmployeeService {
-    private final IEmployeeDal _employeeDal;
-    private  final IDeptManagerDal _deptManagerDal;
-    private final IDepartmentDal _departmentDal;
+    private final IEmployeeDal employeeDal;
+    private  final IDeptManagerDal deptManagerDal;
+    private final IDepartmentDal departmentDal;
 
     @Autowired
     public EmployeeService(IEmployeeDal employeeDal, IDeptManagerDal deptManagerDal, IDepartmentDal departmentDal) {
-        _employeeDal = employeeDal;
-        _deptManagerDal = deptManagerDal;
-        _departmentDal = departmentDal;
+        this.employeeDal = employeeDal;
+        this.deptManagerDal = deptManagerDal;
+        this.departmentDal = departmentDal;
     }
 
     @Override
-    public Employee AddEmployee(EmployeeDTO employeeDTO) {
-        Optional<Department> department=_departmentDal.findById(employeeDTO.getDepartmentID());
-        Optional<DeptManager> deptManager=_deptManagerDal.findById(employeeDTO.getDeptManagerID());
+    public Employee addEmployee(EmployeeDTO employeeDTO) {
+        Optional<Department> department=departmentDal.findById(employeeDTO.getDepartmentID());
+        Optional<DeptManager> deptManager=deptManagerDal.findById(employeeDTO.getDeptManagerID());
 
         if(deptManager.isPresent() && department.isPresent()){
             Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),department.get(), deptManager.get());
@@ -39,29 +39,29 @@ public class EmployeeService  implements IEmployeeService {
             if(employee.getDepartment().getDepartmentID()!=employee.getDeptManager().getDepartment().getDepartmentID()){
                 throw new IllegalStateException("Department manager is not a manager of given department.");
             }
-            return _employeeDal.save(employee);
+            return employeeDal.save(employee);
         }
             else return null;
     }
 
     @Override
-    public Boolean DeleteEmployee(Long empID) {
-        if(_employeeDal.existsById(empID))
+    public Boolean deleteEmployee(Long empID) {
+        if(employeeDal.existsById(empID))
         {
-            _employeeDal.deleteById(empID);
+            employeeDal.deleteById(empID);
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
 
     @Override
-    public Boolean UpdateEmployee(EmployeeDTO employeeDTO, Long id) {
-        if(_employeeDal.existsById(id)) {
-            Optional<Department> department = _departmentDal.findById(employeeDTO.getDepartmentID());
-            Optional<DeptManager> deptManager = _deptManagerDal.findById(employeeDTO.getDeptManagerID());
+    public Boolean updateEmployee(EmployeeDTO employeeDTO, Long id) {
+        if(employeeDal.existsById(id)) {
+            Optional<Department> department = departmentDal.findById(employeeDTO.getDepartmentID());
+            Optional<DeptManager> deptManager = deptManagerDal.findById(employeeDTO.getDeptManagerID());
             if (deptManager.isPresent() && department.isPresent()) {
                 Employee existingEmployee = new Employee(id, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(), deptManager.get(), department.get());
-                _employeeDal.save(existingEmployee);
+                employeeDal.save(existingEmployee);
                 return Boolean.TRUE;
             }
         }
@@ -69,13 +69,13 @@ public class EmployeeService  implements IEmployeeService {
     }
 
     @Override
-    public Collection<Employee> GetEmployees() {
-       return _employeeDal.findAll();
+    public Collection<Employee> getEmployees() {
+       return employeeDal.findAll();
     }
 
     @Override
-    public Optional<Employee> FindEmployee(Long id) {
-        Optional<Employee> foundEmployee = _employeeDal.findById(id);
+    public Optional<Employee> findEmployee(Long id) {
+        Optional<Employee> foundEmployee = employeeDal.findById(id);
         if(foundEmployee.isPresent()){
             return foundEmployee;
         }

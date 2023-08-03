@@ -15,26 +15,26 @@ import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
-    private final IUserDal _userDal;
-    private final PasswordEncoder _passwordEncoder;
+    private final IUserDal userDal;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     public UserService(IUserDal userDal, PasswordEncoder passwordEncoder) {
-        _userDal = userDal;
-        _passwordEncoder = passwordEncoder;
+        this.userDal = userDal;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDto login(CredentialsDto credentialsDto) {
-        Optional<User> user = _userDal.findByLogin(credentialsDto.login());
+        Optional<User> user = userDal.findByLogin(credentialsDto.login());
         if(user.isEmpty()){
             return null;
         }
-        if (_passwordEncoder.matches(CharBuffer.wrap((credentialsDto.password())), user.get().getpassword())) {
+        if (passwordEncoder.matches(CharBuffer.wrap((credentialsDto.password())), user.get().getpassword())) {
         return new UserDto(user.get().getId(), user.get().getFirstName(), user.get().getLastName(), user.get().getLogin());
         } else return null;
     }
     public Optional<User> findByLogin(String login){
-        Optional<User> foundUser= _userDal.findAll().stream().filter(u->u.getLogin().equals(login)).findFirst();
+        Optional<User> foundUser= userDal.findAll().stream().filter(u->u.getLogin().equals(login)).findFirst();
         if(foundUser.isPresent()){
             return foundUser;
         }
@@ -43,13 +43,13 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto register(SignUpDto signUpDto) {
-        Optional<User> oUser=_userDal.findByLogin(signUpDto.login());
+        Optional<User> oUser=userDal.findByLogin(signUpDto.login());
         if(oUser.isPresent()){
             return null;
         }
-        User user=new User(signUpDto.firstName(),signUpDto.lastName(),signUpDto.login(), _passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
+        User user=new User(signUpDto.firstName(),signUpDto.lastName(),signUpDto.login(), passwordEncoder.encode(CharBuffer.wrap(signUpDto.password())));
         UserDto userDto=new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getLogin());
-        _userDal.save(user);
+        userDal.save(user);
         return userDto;
     }
 }

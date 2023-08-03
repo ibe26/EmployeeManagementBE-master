@@ -11,10 +11,9 @@ import java.util.function.Predicate;
 @Service
 public interface IDeptManagerService {
 
-    Collection<DeptManager> GetDeptManagers();
-    DeptManager AddDeptManager(DeptManagerDTO deptManagerDTO);
-    Boolean DeleteDeptManager(Long deptManagerID);
-    Boolean UpdateDeptManager(DeptManagerDTO deptManagerDTO,Long id);
-    Optional<DeptManager> FindDeptManager(Long id);
-    Optional<DeptManager> FilterDeptManager(Predicate<DeptManager> predicate);
+    Collection<DeptManager> getDeptManagers();
+    DeptManager addDeptManager(DeptManagerDTO deptManagerDTO);
+    Boolean deleteDeptManager(Long deptManagerID);
+    Boolean updateDeptManager(DeptManagerDTO deptManagerDTO,Long id);
+    Optional<DeptManager> findDeptManager(Long id);
 }

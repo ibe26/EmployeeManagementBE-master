@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Service
 public interface IEmployeeService {
-     Collection<Employee> GetEmployees();
-     Employee AddEmployee(EmployeeDTO employeeDTO);
-     Boolean DeleteEmployee(Long empID);
-     Boolean UpdateEmployee(EmployeeDTO employeeDTO,Long id);
-     Optional<Employee> FindEmployee(Long id);
+     Collection<Employee> getEmployees();
+     Employee addEmployee(EmployeeDTO employeeDTO);
+     Boolean deleteEmployee(Long empID);
+     Boolean updateEmployee(EmployeeDTO employeeDTO,Long id);
+     Optional<Employee> findEmployee(Long id);
 }

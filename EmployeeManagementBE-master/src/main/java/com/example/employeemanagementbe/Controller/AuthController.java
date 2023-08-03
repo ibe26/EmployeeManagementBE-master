@@ -14,28 +14,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
-    private final IUserService _userService;
-    private final UserAuthProvider _userAuthProvider;
+    private final IUserService userService;
+    private final UserAuthProvider userAuthProvider;
 
     @Autowired
     public AuthController(IUserService userService, UserAuthProvider userAuthProvider) {
-        _userService = userService;
-        _userAuthProvider = userAuthProvider;
+        this.userService = userService;
+        this.userAuthProvider = userAuthProvider;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody CredentialsDto credentialsDto){
-        UserDto userDto=_userService.login(credentialsDto);
+        UserDto userDto=userService.login(credentialsDto);
         if(userDto==null){
             return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
         }
-        String token=_userAuthProvider.generateJwtToken(userDto);
+        String token=userAuthProvider.generateJwtToken(userDto);
         userDto.setToken(token);
         return new ResponseEntity<>(userDto,HttpStatus.OK);
     }
     @PostMapping("/register")
     public ResponseEntity<HttpStatus> register(@RequestBody SignUpDto signUpDto){
-        UserDto userDto=_userService.register(signUpDto);
+        UserDto userDto=userService.register(signUpDto);
         if(userDto==null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +44,7 @@ public class AuthController {
     }
     @PostMapping("/validate-token")
     public ResponseEntity<Boolean> validateToken(@RequestBody String token){
-       if(_userAuthProvider.validateJwtToken(token)){
+       if(userAuthProvider.validateJwtToken(token)){
            return new ResponseEntity<>(true,HttpStatus.OK);
        }
        return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);

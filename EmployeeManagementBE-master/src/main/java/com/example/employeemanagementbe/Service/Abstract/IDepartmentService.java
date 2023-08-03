@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Service
 public interface IDepartmentService {
-    Collection<Department> GetDepartment();
-    Department AddDepartment(DepartmentDTO departmentDTO);
-    Boolean DeleteDepartment(Long departmentID);
-    Boolean UpdateDepartment(DepartmentDTO departmentDTO, Long id);
-    Optional<Department> FindDepartment(Long id);
+    Collection<Department> getDepartment();
+    Department addDepartment(DepartmentDTO departmentDTO);
+    Boolean deleteDepartment(Long departmentID);
+    Boolean updateDepartment(DepartmentDTO departmentDTO, Long id);
+    Optional<Department> findDepartment(Long id);
 }
