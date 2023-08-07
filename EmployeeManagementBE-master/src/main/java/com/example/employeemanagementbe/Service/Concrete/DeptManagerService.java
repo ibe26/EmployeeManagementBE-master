@@ -36,7 +36,10 @@ public class DeptManagerService implements IDeptManagerService {
         if(foundDepartment.isEmpty()){
             throw new IllegalStateException("No department found.");
         }
-        DeptManager deptManager=new DeptManager(deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(),foundDepartment.get());
+        DeptManager deptManager=new DeptManager(deptManagerDTO.getFirstName(),
+                                                deptManagerDTO.getLastName(),
+                                                deptManagerDTO.getEmail(),
+                                                foundDepartment.get());
         return deptManagerDal.save(deptManager);
     }
 
@@ -56,7 +59,11 @@ public class DeptManagerService implements IDeptManagerService {
         {
             Optional<Department> department=departmentDal.findById(deptManagerDTO.getDepartmentID());
             if(department.isPresent()){
-                DeptManager existingDeptManager=new DeptManager(id, deptManagerDTO.getFirstName(), deptManagerDTO.getLastName(), deptManagerDTO.getEmail(), department.get());
+                DeptManager existingDeptManager=new DeptManager(id,
+                                                                deptManagerDTO.getFirstName(),
+                                                                deptManagerDTO.getLastName(),
+                                                                deptManagerDTO.getEmail(),
+                                                                department.get());
                 deptManagerDal.save(existingDeptManager);
                 return Boolean.TRUE;
             }
