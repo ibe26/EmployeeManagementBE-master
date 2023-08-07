@@ -33,7 +33,11 @@ public class EmployeeService  implements IEmployeeService {
         Optional<DeptManager> deptManager=deptManagerDal.findById(employeeDTO.getDeptManagerID());
 
         if(deptManager.isPresent() && department.isPresent()){
-            Employee employee=new Employee(employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(),department.get(), deptManager.get());
+            Employee employee=new Employee(employeeDTO.getFirstName()
+                                           ,employeeDTO.getLastName()
+                                           ,employeeDTO.getEmail(),
+                                           department.get()
+                                           ,deptManager.get());
 
             //Department and Department Manager's department must be compatible.
             if(employee.getDepartment().getDepartmentID()!=employee.getDeptManager().getDepartment().getDepartmentID()){
@@ -60,7 +64,12 @@ public class EmployeeService  implements IEmployeeService {
             Optional<Department> department = departmentDal.findById(employeeDTO.getDepartmentID());
             Optional<DeptManager> deptManager = deptManagerDal.findById(employeeDTO.getDeptManagerID());
             if (deptManager.isPresent() && department.isPresent()) {
-                Employee existingEmployee = new Employee(id, employeeDTO.getFirstName(), employeeDTO.getLastName(), employeeDTO.getEmail(), deptManager.get(), department.get());
+                Employee existingEmployee = new Employee(id
+                                                         , employeeDTO.getFirstName()
+                                                         , employeeDTO.getLastName()
+                                                         , employeeDTO.getEmail()
+                                                         , deptManager.get()
+                                                         , department.get());
                 employeeDal.save(existingEmployee);
                 return Boolean.TRUE;
             }
